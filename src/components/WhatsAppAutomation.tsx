@@ -13,13 +13,29 @@ import {
   ExternalLink
 } from 'lucide-react';
 
-export const WhatsAppAutomation: React.FC = () => {
+interface WhatsAppAutomationProps {
+  initialContact?: { name: string; phone: string } | null;
+  onNavigateToContacts?: () => void;
+}
+
+export const WhatsAppAutomation: React.FC<WhatsAppAutomationProps> = ({
+  initialContact,
+  onNavigateToContacts,
+}) => {
   const [templateType, setTemplateType] = useState<'fee_reminder' | 'payment_receipt' | 'attendance' | 'exam_promo'>('fee_reminder');
-  const [parentName, setParentName] = useState('Puan Halimah');
+  const [parentName, setParentName] = useState(initialContact?.name || 'Puan Halimah');
   const [studentName, setStudentName] = useState('Nur Aina Batrisyia');
-  const [phoneNo, setPhoneNo] = useState('+60123456789');
+  const [phoneNo, setPhoneNo] = useState(initialContact?.phone || '+60123456789');
   const [amount, setAmount] = useState('240.00');
   const [subject, setSubject] = useState('Matematik Tambahan & Fizik (SPM)');
+
+  // Update if initialContact changes
+  React.useEffect(() => {
+    if (initialContact) {
+      if (initialContact.name) setParentName(initialContact.name);
+      if (initialContact.phone) setPhoneNo(initialContact.phone);
+    }
+  }, [initialContact]);
   
   // Status simulation
   const [isSending, setIsSending] = useState(false);
@@ -167,7 +183,18 @@ export const WhatsAppAutomation: React.FC = () => {
           {/* Form Dynamic Inputs */}
           <div className="grid sm:grid-cols-2 gap-4">
             <div>
-              <label className="text-xs font-semibold text-slate-300 mb-1 block">Nama Ibu Bapa</label>
+              <div className="flex items-center justify-between mb-1">
+                <label className="text-xs font-semibold text-slate-300">Nama Ibu Bapa</label>
+                {onNavigateToContacts && (
+                  <button
+                    type="button"
+                    onClick={onNavigateToContacts}
+                    className="text-[10px] text-blue-400 hover:text-blue-300 underline font-semibold"
+                  >
+                    Pilih dari Google Contacts
+                  </button>
+                )}
+              </div>
               <input
                 type="text"
                 value={parentName}

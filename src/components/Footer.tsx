@@ -72,6 +72,14 @@ export const Footer: React.FC<FooterProps> = ({ onNavigateTab, onOpenCheckout })
               </li>
               <li>
                 <button
+                  onClick={() => onNavigateTab('contacts')}
+                  className="hover:text-amber-400 transition-colors flex items-center gap-1.5"
+                >
+                  <span>Google Contacts (Penyegerakan)</span>
+                </button>
+              </li>
+              <li>
+                <button
                   onClick={() => onNavigateTab('portal')}
                   className="hover:text-amber-400 transition-colors"
                 >

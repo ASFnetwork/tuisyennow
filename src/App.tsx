@@ -13,6 +13,7 @@ import { WhatsAppAutomation } from './components/WhatsAppAutomation';
 import { TrafficGenerator } from './components/TrafficGenerator';
 import { DidikSystemPreview } from './components/DidikSystemPreview';
 import { PhpMysqlCodeHub } from './components/PhpMysqlCodeHub';
+import { GoogleContactsManager } from './components/GoogleContactsManager';
 import { TestimonialsFaq } from './components/TestimonialsFaq';
 import { Footer } from './components/Footer';
 import { CheckoutModal } from './components/CheckoutModal';
@@ -23,6 +24,8 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<string>('funnel');
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [selectedPlanId, setSelectedPlanId] = useState<string>('growth');
+  const [selectedContactForWA, setSelectedContactForWA] = useState<{ name: string; phone: string } | null>(null);
+  const [importedStudent, setImportedStudent] = useState<{ name: string; phone: string; email?: string } | null>(null);
 
   const handleOpenCheckout = (planId?: string) => {
     if (planId) setSelectedPlanId(planId);
@@ -35,8 +38,17 @@ export default function App() {
   };
 
   const handlePaymentSuccess = (details: any) => {
-    // When iPay88 succeeds in simulator, notify and optionally link to WhatsApp tab
     console.log('Payment successful:', details);
+  };
+
+  const handleSelectContactForWhatsApp = (contact: { name: string; phone: string }) => {
+    setSelectedContactForWA(contact);
+    setActiveTab('whatsapp');
+  };
+
+  const handleImportContactAsStudent = (contact: { name: string; phone: string; email?: string }) => {
+    setImportedStudent(contact);
+    setActiveTab('portal');
   };
 
   return (
@@ -123,6 +135,15 @@ export default function App() {
           </div>
         )}
 
+        {activeTab === 'contacts' && (
+          <div className="pt-4 pb-12">
+            <GoogleContactsManager
+              onSelectContactForWhatsApp={handleSelectContactForWhatsApp}
+              onImportContactAsStudent={handleImportContactAsStudent}
+            />
+          </div>
+        )}
+
         {activeTab === 'roi' && (
           <div className="pt-4 pb-12">
             <RoiCalculator onOpenCheckout={handleOpenCheckout} />
@@ -143,13 +164,20 @@ export default function App() {
 
         {activeTab === 'whatsapp' && (
           <div className="pt-4 pb-12">
-            <WhatsAppAutomation />
+            <WhatsAppAutomation
+              initialContact={selectedContactForWA}
+              onNavigateToContacts={() => setActiveTab('contacts')}
+            />
           </div>
         )}
 
         {activeTab === 'portal' && (
           <div className="pt-4 pb-12">
-            <DidikSystemPreview onOpenCheckout={handleOpenCheckout} />
+            <DidikSystemPreview
+              onOpenCheckout={handleOpenCheckout}
+              importedStudent={importedStudent}
+              onNavigateToContacts={() => setActiveTab('contacts')}
+            />
           </div>
         )}
 

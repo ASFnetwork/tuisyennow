@@ -10,7 +10,8 @@ import {
   Menu,
   X,
   ShieldCheck,
-  TrendingUp
+  TrendingUp,
+  Users
 } from 'lucide-react';
 
 interface NavbarProps {
@@ -24,6 +25,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, onOpenC
 
   const navItems = [
     { id: 'funnel', label: 'Utama', icon: Sparkles },
+    { id: 'contacts', label: 'Google Contacts', icon: Users, badge: 'Baru' },
     { id: 'roi', label: 'Kalkulator ROI', icon: Calculator },
     { id: 'pricing', label: 'Pakej Langganan', icon: ShieldCheck },
     { id: 'ipay88', label: 'Modul iPay88', icon: CreditCard },

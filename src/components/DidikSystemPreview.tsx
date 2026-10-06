@@ -22,13 +22,40 @@ import {
 
 interface DidikSystemPreviewProps {
   onOpenCheckout: (planId?: string) => void;
+  importedStudent?: { name: string; phone: string; email?: string } | null;
+  onNavigateToContacts?: () => void;
 }
 
-export const DidikSystemPreview: React.FC<DidikSystemPreviewProps> = ({ onOpenCheckout }) => {
+export const DidikSystemPreview: React.FC<DidikSystemPreviewProps> = ({ 
+  onOpenCheckout,
+  importedStudent,
+  onNavigateToContacts,
+}) => {
   const [students, setStudents] = useState<Student[]>(SAMPLE_STUDENTS);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'paid' | 'pending' | 'overdue'>('all');
   const [notificationSentId, setNotificationSentId] = useState<string | null>(null);
+
+  // Automatically add imported student from Google Contacts if supplied
+  React.useEffect(() => {
+    if (importedStudent) {
+      const exists = students.some(s => s.parentName === importedStudent.name || s.parentPhone === importedStudent.phone);
+      if (!exists) {
+        const newStu: Student = {
+          id: `STU-G${Date.now().toString().slice(-3)}`,
+          name: `Anak kepada ${importedStudent.name}`,
+          icNumber: '090101-10-8899',
+          grade: 'Tingkatan 4 (SPM 2026)',
+          parentName: importedStudent.name,
+          parentPhone: importedStudent.phone,
+          subjects: ['Bahasa Melayu', 'Matematik', 'Sains'],
+          monthlyFee: 180,
+          paymentStatus: 'pending',
+        };
+        setStudents(prev => [newStu, ...prev]);
+      }
+    }
+  }, [importedStudent]);
 
   // Filter students
   const filteredStudents = students.filter((stu) => {

@@ -2,5 +2,7 @@
   "name": "Didik TuisyenNow - Sistem Pengurusan & Trafik SME Tuisyen",
   "description": "Sistem penjana trafik dan langganan didik.tuisyennow.my untuk pemilik SME Pusat Tuisyen di Malaysia dengan integrasi iPay88, automasi WhatsApp, dan skrip PHP/MySQL.",
   "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
 }
